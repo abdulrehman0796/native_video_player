@@ -93,6 +93,7 @@ class NativeVideoPlayerController implements NativeVideoPlayerFlutterApi {
   @protected
   @override
   void onPlaybackEvent(PlaybackEvent event) {
+    if (_eventsController.isClosed) return;
     _eventsController.add(event);
   }
 
@@ -117,9 +118,7 @@ class NativeVideoPlayerController implements NativeVideoPlayerFlutterApi {
 
   /// Loads a new video source.
   Future<void> loadVideo(VideoSource source) async {
-    final path = source.type == VideoSourceType.asset
-        ? (await loadAssetFile(source.path)).path
-        : source.path;
+    final path = source.type == VideoSourceType.asset ? (await loadAssetFile(source.path)).path : source.path;
     final actualSource = VideoSource(
       path: path,
       type: source.type,
